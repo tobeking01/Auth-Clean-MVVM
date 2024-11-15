@@ -1,8 +1,9 @@
+import 'package:auth_clean_mvvm/core/error/exceptions.dart';
+
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../datasources/authentication_remote_data_source.dart';
 import '../datasources/authentication_local_data_source.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import 'package:dartz/dartz.dart';
