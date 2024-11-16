@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/usecases/login_user.dart';
 import '../../domain/entities/user.dart';
+
+final logger = Logger();
 
 /// Authentication events handled by [AuthenticationBloc].
 abstract class AuthenticationEvent extends Equatable {
@@ -70,18 +73,26 @@ class AuthenticationBloc
   ) async {
     emit(AuthenticationLoading());
 
-    final result = await loginUser(
-      LoginParams(email: event.email, password: event.password),
-    );
+    try {
+      final result = await loginUser(
+        LoginParams(email: event.email, password: event.password),
+      );
 
-    result.fold(
-      (failure) {
-        emit(AuthenticationFailure(_mapFailureToMessage(failure)));
-      },
-      (user) {
-        emit(AuthenticationSuccess(user));
-      },
-    );
+      result.fold(
+        (failure) {
+          final errorMessage = _mapFailureToMessage(failure);
+          logger.e('❌ Login failed: $errorMessage');
+          emit(AuthenticationFailure(errorMessage));
+        },
+        (user) {
+          logger.i('✅ Login successful for user: ${user.toString()}');
+          emit(AuthenticationSuccess(user));
+        },
+      );
+    } catch (e) {
+      logger.e('❌ Error during login: $e');
+      emit(AuthenticationFailure('Unexpected error occurred. Please try again.'));
+    }
   }
 
   /// Maps a [Failure] to a user-friendly error message.

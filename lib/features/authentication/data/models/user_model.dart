@@ -18,4 +18,13 @@ class UserModel extends User {
       'name': name,
     };
   }
+
+  /// Converts a [User] entity to a [UserModel].
+  factory UserModel.fromEntity(User user) {
+    return UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    );
+  }
 }

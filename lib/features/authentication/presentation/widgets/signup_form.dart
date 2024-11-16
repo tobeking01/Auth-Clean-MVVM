@@ -12,6 +12,28 @@ class SignupForm extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
     final logger = Logger();
 
+    Future<void> handleSignup() async {
+      if (formKey.currentState!.validate()) {
+        final name = nameController.text;
+        final email = emailController.text;
+       // final password = passwordController.text;
+
+        logger.i('💡 Attempting signup with Name: $name, Email: $email');
+
+        // Simulate async signup operation
+        await Future.delayed(const Duration(seconds: 2));
+
+        if (!context.mounted) return; // Ensure the context is still valid
+
+        // Simulate success and navigate to LoginPage
+        logger.i('✅ Signup successful!');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Signup successful! Please log in.')),
+        );
+        Navigator.of(context).pop(); // Navigate back to LoginPage
+      }
+    }
+
     return Form(
       key: formKey,
       child: Column(
@@ -65,15 +87,7 @@ class SignupForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                // Handle signup logic
-                final name = nameController.text;
-                final email = emailController.text;
-                final password = passwordController.text;
-                logger.i('Name: $name, Email: $email, Password: $password');
-              }
-            },
+            onPressed: handleSignup,
             child: const Text('Signup'),
           ),
         ],

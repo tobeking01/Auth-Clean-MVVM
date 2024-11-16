@@ -11,6 +11,26 @@ class LoginForm extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
     final logger = Logger();
 
+    Future<void> handleLogin() async {
+      if (formKey.currentState!.validate()) {
+        final email = emailController.text;
+        final password = passwordController.text;
+
+        logger.i('💡 Attempting login with Email: $email, Password: $password');
+
+        // Simulating async operation
+        await Future.delayed(const Duration(seconds: 2)); 
+
+        if (!context.mounted) return; // Ensure the context is still valid
+        
+        // Simulate success and navigate to HomeScreen
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    }
+
     return Form(
       key: formKey,
       child: Column(
@@ -50,14 +70,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                // Handle login logic
-                final email = emailController.text;
-                final password = passwordController.text;
-                logger.i('Email: $email, Password: $password');
-              }
-            },
+            onPressed: handleLogin,
             child: const Text('Login'),
           ),
         ],

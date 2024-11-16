@@ -9,17 +9,16 @@ class NetworkInfoImpl implements NetworkInfo {
 
   @override
   Future<bool> get isConnected async {
-    // Fetch the connectivity result
-    final ConnectivityResult connectivityResult =
-        (await connectivity.checkConnectivity()) as ConnectivityResult;
+    // Get the connectivity result as a list of available connection types.
+    final List<ConnectivityResult> connectivityResults = await connectivity.checkConnectivity();
 
-    // Define valid connectivity types
-    final List<ConnectivityResult> validConnections = [
+    // Define valid connectivity options.
+    const validConnections = [
       ConnectivityResult.wifi,
       ConnectivityResult.mobile,
     ];
 
-    // Return true if the result matches any valid connection
-    return validConnections.contains(connectivityResult);
+    // Check if the list of available connections contains a valid connection.
+    return connectivityResults.any((result) => validConnections.contains(result));
   }
 }

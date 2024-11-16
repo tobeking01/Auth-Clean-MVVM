@@ -17,26 +17,32 @@ final GetIt getIt = GetIt.instance;
 
 /// Initializes all the necessary dependencies.
 Future<void> setupDependencies() async {
-  // External dependencies
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton(() => Connectivity());
-  getIt.registerLazySingleton(() => sharedPreferences);
-  getIt.registerLazySingleton<http.Client>(() => http.Client());
+  try {
+    // External dependencies
+    final sharedPreferences = await SharedPreferences.getInstance();
+    getIt.registerLazySingleton(() => Connectivity());
+    getIt.registerLazySingleton(() => sharedPreferences);
+    getIt.registerLazySingleton<http.Client>(() => http.Client());
 
-  // Core
-  getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(getIt<Connectivity>()));
+    // Core
+    getIt.registerLazySingleton<NetworkInfo>(
+        () => NetworkInfoImpl(getIt<Connectivity>()));
 
-  // Data sources
-  getIt.registerLazySingleton<AuthenticationRemoteDataSource>(
-      () => AuthenticationRemoteDataSourceImpl(client: getIt<http.Client>()));
-  getIt.registerLazySingleton<AuthenticationLocalDataSource>(
-      () => AuthenticationLocalDataSourceImpl(sharedPreferences: getIt<SharedPreferences>()));
+    // Data sources
+    getIt.registerLazySingleton<AuthenticationRemoteDataSource>(
+        () => AuthenticationRemoteDataSourceImpl(client: getIt<http.Client>()));
+    getIt.registerLazySingleton<AuthenticationLocalDataSource>(() =>
+        AuthenticationLocalDataSourceImpl(
+            sharedPreferences: getIt<SharedPreferences>()));
 
-  // Repositories
-  getIt.registerLazySingleton<AuthenticationRepository>(
-      () => AuthenticationRepositoryImpl(
-            remoteDataSource: getIt<AuthenticationRemoteDataSource>(),
-            localDataSource: getIt<AuthenticationLocalDataSource>(),
-            networkInfo: getIt<NetworkInfo>(),
-          ));
+    // Repositories
+    getIt.registerLazySingleton<AuthenticationRepository>(
+        () => AuthenticationRepositoryImpl(
+              remoteDataSource: getIt<AuthenticationRemoteDataSource>(),
+              localDataSource: getIt<AuthenticationLocalDataSource>(),
+              networkInfo: getIt<NetworkInfo>(),
+            ));
+  } catch (e) {
+    throw Exception('Failed to initialize dependencies: $e');
+  }
 }
