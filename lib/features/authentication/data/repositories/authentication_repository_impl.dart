@@ -50,7 +50,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return Left(ServerFailure());
       }
     } else {
-      return Left(NetworkFailure()); // Ensure NetworkFailure is defined in failures.dart
+      return Left(NetworkFailure());
     }
   }
 }

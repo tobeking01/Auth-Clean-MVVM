@@ -3,12 +3,29 @@ import '../entities/user.dart';
 import '../repositories/authentication_repository.dart';
 import '../../../../core/error/failures.dart';
 
+/// Use case for signing up a new user.
 class SignupUser {
   final AuthenticationRepository repository;
 
   SignupUser(this.repository);
 
-  Future<Either<Failure, User>> call(String email, String password, String name) async {
-    return await repository.signup(email, password, name);
+  /// Executes the signup use case.
+  /// 
+  /// Takes [SignupParams] containing the email, password, and name.
+  Future<Either<Failure, User>> call(SignupParams params) async {
+    return await repository.signup(params.email, params.password, params.name);
   }
+}
+
+/// Parameters for the [SignupUser] use case.
+class SignupParams {
+  final String email;
+  final String password;
+  final String name;
+
+  const SignupParams({
+    required this.email,
+    required this.password,
+    required this.name,
+  });
 }

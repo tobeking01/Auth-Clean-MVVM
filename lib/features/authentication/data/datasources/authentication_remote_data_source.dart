@@ -11,5 +11,3 @@ abstract class AuthenticationRemoteDataSource {
   /// Throws a [ServerException] for all error codes.
   Future<UserModel> signup(String email, String password, String name);
 }
-
-// TODO: Implement the remote data source using http or dio.

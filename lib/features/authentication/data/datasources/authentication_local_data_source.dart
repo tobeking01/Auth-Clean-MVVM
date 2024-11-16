@@ -9,5 +9,3 @@ abstract class AuthenticationLocalDataSource {
   /// Caches the [UserModel] locally.
   Future<void> cacheUser(UserModel userToCache);
 }
-
-// TODO: Implement the local data source using shared_preferences or hive.
