@@ -1,5 +1,4 @@
 import 'package:auth_clean_mvvm/core/error/exceptions.dart';
-
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../datasources/authentication_remote_data_source.dart';
@@ -23,33 +22,44 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<Either<Failure, User>> login(String email, String password) async {
     if (await networkInfo.isConnected) {
       try {
+        // Attempt remote login
         final userModel = await remoteDataSource.login(email, password);
+        
+        // Cache the user data locally
         await localDataSource.cacheUser(userModel);
         return Right(userModel);
       } on ServerException {
+        // Handle server-related failures
         return Left(ServerFailure());
       }
     } else {
       try {
+        // Fallback to local cache if offline
         final userModel = await localDataSource.getLastUser();
         return Right(userModel);
       } on CacheException {
+        // Handle cache-related failures
         return Left(CacheFailure());
       }
     }
   }
 
   @override
-  Future<Either<Failure, User>> signup(String email, String password, String name) async {
+  Future<Either<Failure, User>> signup(String email, String password, String username) async {
     if (await networkInfo.isConnected) {
       try {
-        final userModel = await remoteDataSource.signup(email, password, name);
+        // Attempt remote signup
+        final userModel = await remoteDataSource.signup(username, email, password);
+        
+        // Cache the user data locally
         await localDataSource.cacheUser(userModel);
         return Right(userModel);
       } on ServerException {
+        // Handle server-related failures
         return Left(ServerFailure());
       }
     } else {
+      // Cannot signup while offline
       return Left(NetworkFailure());
     }
   }

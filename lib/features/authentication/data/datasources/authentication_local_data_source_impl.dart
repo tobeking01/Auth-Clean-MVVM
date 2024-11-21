@@ -7,15 +7,19 @@ import 'authentication_local_data_source.dart';
 import '../models/user_model.dart';
 
 /// Implementation of [AuthenticationLocalDataSource] using SharedPreferences.
-class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource {
+class AuthenticationLocalDataSourceImpl
+    implements AuthenticationLocalDataSource {
   final SharedPreferences sharedPreferences;
 
   AuthenticationLocalDataSourceImpl({required this.sharedPreferences});
 
+  static const String _cachedUserKey = 'CACHED_USER';
+
   @override
-  Future<void> cacheUser(UserModel userToCache) {
+  Future<void> cacheUser(UserModel userToCache) async {
     final userJson = jsonEncode(userToCache.toJson());
-    return sharedPreferences.setString('CACHED_USER', userJson);
+    final success = await sharedPreferences.setString(_cachedUserKey, userJson);
+    if (!success) throw CacheException('Failed to cache user.');
   }
 
   @override
