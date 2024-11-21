@@ -13,7 +13,7 @@ class SignupUser {
   /// 
   /// Takes [SignupParams] containing the email, password, and name.
   Future<Either<Failure, User>> call(SignupParams params) async {
-    return await repository.signup(params.email, params.password, params.name);
+    return await repository.signup(params.email, params.password, params.username);
   }
 }
 
@@ -21,11 +21,11 @@ class SignupUser {
 class SignupParams {
   final String email;
   final String password;
-  final String name;
+  final String username;
 
   const SignupParams({
     required this.email,
     required this.password,
-    required this.name,
+    required this.username,
   });
 }

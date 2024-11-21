@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
+import '../../data/datasources/authentication_remote_data_source_impl.dart';
 
 class SignupForm extends StatelessWidget {
   const SignupForm({super.key});
@@ -7,10 +9,45 @@ class SignupForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final TextEditingController nameController = TextEditingController();
+    final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final logger = Logger();
+
+    // Initialize the remote data source
+    final remoteDataSource = AuthenticationRemoteDataSourceImpl(client: http.Client());
+
+    Future<void> handleSignup() async {
+      if (formKey.currentState!.validate()) {
+        final username = usernameController.text;
+        final email = emailController.text;
+        final password = passwordController.text;
+
+        logger.i('💡 Attempting signup with Username: $username, Email: $email');
+
+        try {
+          final user = await remoteDataSource.signup( username, email, password,);
+          if (!context.mounted) return; 
+
+          logger.i('✅ Signup successful: ${user.toJson()}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Signup successful! Please log in.'),
+            ),
+          );
+
+          // Navigate to Login Page
+          Navigator.of(context).pushReplacementNamed('/login');
+        } catch (e) {
+          logger.e('❌ Signup failed: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Signup failed: $e'),
+            ),
+          );
+        }
+      }
+    }
 
     return Form(
       key: formKey,
@@ -18,14 +55,14 @@ class SignupForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
-            controller: nameController,
+            controller: usernameController,
             decoration: const InputDecoration(
-              labelText: 'Name',
+              labelText: 'Username',
               border: OutlineInputBorder(),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your name';
+                return 'Please enter your username';
               }
               return null;
             },
@@ -65,15 +102,7 @@ class SignupForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                // Handle signup logic
-                final name = nameController.text;
-                final email = emailController.text;
-                final password = passwordController.text;
-                logger.i('Name: $name, Email: $email, Password: $password');
-              }
-            },
+            onPressed: handleSignup,
             child: const Text('Signup'),
           ),
         ],

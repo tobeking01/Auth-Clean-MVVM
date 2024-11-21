@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
+import '../../data/datasources/authentication_remote_data_source_impl.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -10,6 +12,36 @@ class LoginForm extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final logger = Logger();
+
+    // Initialize the remote data source
+    final remoteDataSource = AuthenticationRemoteDataSourceImpl(client: http.Client());
+
+    Future<void> handleLogin() async {
+      if (formKey.currentState!.validate()) {
+        final email = emailController.text;
+        final password = passwordController.text;
+
+        logger.i('💡 Attempting login with Email: $email');
+
+        try {
+          final user = await remoteDataSource.login(email, password);
+          logger.i('✅ Login successful for user: ${user.toJson()}');
+
+          if (!context.mounted) return;
+
+          // Navigate to the home page on successful login
+          Navigator.of(context).pushReplacementNamed('/home');
+        } catch (e) {
+          logger.e('❌ Login failed: $e');
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Login failed. Please try again.')),
+            );
+          }
+        }
+      }
+    }
 
     return Form(
       key: formKey,
@@ -50,14 +82,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                // Handle login logic
-                final email = emailController.text;
-                final password = passwordController.text;
-                logger.i('Email: $email, Password: $password');
-              }
-            },
+            onPressed: handleLogin,
             child: const Text('Login'),
           ),
         ],
