@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import '../../data/datasources/authentication_remote_data_source_impl.dart';
-import '../pages/home_page.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -14,8 +13,8 @@ class LoginForm extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
     final logger = Logger();
 
-    // Initialize the remote data source
-    final remoteDataSource = AuthenticationRemoteDataSourceImpl(client: http.Client());
+    final remoteDataSource =
+        AuthenticationRemoteDataSourceImpl(client: http.Client());
 
     Future<void> handleLogin() async {
       if (formKey.currentState!.validate()) {
@@ -30,15 +29,12 @@ class LoginForm extends StatelessWidget {
 
           if (!context.mounted) return;
 
-          // Navigate to the home page and pass the user object
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => HomePage(user: user),
-            ),
+          Navigator.of(context).pushReplacementNamed(
+            '/home',
+            arguments: user, // Pass User object to HomePage
           );
         } catch (e) {
           logger.e('❌ Login failed: $e');
-
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Login failed. Please try again.')),
@@ -88,7 +84,13 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: handleLogin,
-            child: const Text('Login'),
+            child: const Text(
+              'Login',
+              style: TextStyle(
+                color: Colors.blue, // Set text color to white
+                fontSize: 16, // Optional: Adjust font size if needed
+              ),
+            ),
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/login_form.dart';
-import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -9,10 +8,11 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text('Login'),
       ),
-      resizeToAvoidBottomInset: true, // Ensures view adjusts for the keyboard
+      resizeToAvoidBottomInset: true, // Ensure the view adjusts for the keyboard
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -20,16 +20,12 @@ class LoginPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const LoginForm(),
+              const LoginForm(), // Ensure the LoginForm widget exists and works
               const SizedBox(height: 24),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignupPage(),
-                    ),
-                  );
+                  // Navigate to SignupPage
+                     Navigator.of(context).pushNamed('/signup');
                 },
                 child: const Text(
                   "Don't have an account? Sign Up",

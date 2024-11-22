@@ -1,6 +1,9 @@
 import 'package:auth_clean_mvvm/core/injectable/injectable.dart';
 import 'package:flutter/material.dart';
+import 'features/authentication/domain/entities/user.dart';
 import 'features/authentication/presentation/pages/login_page.dart';
+import 'features/authentication/presentation/pages/signup_page.dart';
+import 'features/authentication/presentation/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +22,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(), // Use LoginPage as the home page
+      initialRoute: '/login',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/login':
+            return MaterialPageRoute(builder: (context) => const LoginPage());
+          case '/signup':
+            return MaterialPageRoute(builder: (context) => const SignupPage());
+          case '/home':
+            final user = settings.arguments as User;
+            return MaterialPageRoute(
+              builder: (context) => HomePage(user: user),
+            );
+          default:
+            return MaterialPageRoute(builder: (context) => const LoginPage());
+        }
+      },
     );
   }
 }
