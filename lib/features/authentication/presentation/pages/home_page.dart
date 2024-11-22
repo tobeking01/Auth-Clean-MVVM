@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/user.dart'; // Import the User entity
+import '../../domain/entities/user.dart';
+import 'login_page.dart'; // Import User entity
 
 class HomePage extends StatelessWidget {
   final User user; // Accepts the User object
@@ -19,19 +20,21 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome, ${user.username}!', // Use the username from the User object
+              'Welcome, ${user.username}!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              'Email: ${user.email}', // Display the user's email
+              'Email: ${user.email}',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Navigate back to login (simulate logout)
-                Navigator.of(context).pushReplacementNamed('/login');
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
               },
               child: const Text('Logout'),
             ),
