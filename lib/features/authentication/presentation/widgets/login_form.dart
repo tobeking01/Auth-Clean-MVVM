@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import '../../data/datasources/authentication_remote_data_source_impl.dart';
+import '../pages/home_page.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -29,8 +30,12 @@ class LoginForm extends StatelessWidget {
 
           if (!context.mounted) return;
 
-          // Navigate to the home page on successful login
-          Navigator.of(context).pushReplacementNamed('/home');
+          // Navigate to the home page and pass the user object
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => HomePage(user: user),
+            ),
+          );
         } catch (e) {
           logger.e('❌ Login failed: $e');
 

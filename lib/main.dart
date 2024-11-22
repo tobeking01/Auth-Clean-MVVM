@@ -1,6 +1,5 @@
 import 'package:auth_clean_mvvm/core/injectable/injectable.dart';
 import 'package:flutter/material.dart';
-import 'features/authentication/presentation/pages/home_page.dart';
 import 'features/authentication/presentation/pages/login_page.dart';
 
 void main() async {
@@ -20,11 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login', // Set the initial route
-      routes: {
-        '/login': (context) => const LoginPage(), // Map to LoginPage
-        '/home': (context) => const HomePage(),   // Map to HomePage
-      },
+      home: const LoginPage(), // Use LoginPage as the home page
     );
   }
 }

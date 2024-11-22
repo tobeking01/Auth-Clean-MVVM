@@ -9,6 +9,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Login'),
       ),
       resizeToAvoidBottomInset: true, // Ensures view adjusts for the keyboard
