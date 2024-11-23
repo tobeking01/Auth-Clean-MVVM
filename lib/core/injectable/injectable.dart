@@ -13,6 +13,8 @@ import 'package:auth_clean_mvvm/features/authentication/data/datasources/authent
 import 'package:auth_clean_mvvm/features/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:auth_clean_mvvm/features/authentication/domain/repositories/authentication_repository.dart';
 
+import '../../features/navigation/presentation/bloc/bottom_bloc.dart';
+
 final GetIt getIt = GetIt.instance;
 
 /// Initializes all the necessary dependencies.
@@ -42,6 +44,9 @@ Future<void> setupDependencies() async {
               localDataSource: getIt<AuthenticationLocalDataSource>(),
               networkInfo: getIt<NetworkInfo>(),
             ));
+
+    // Register BottomBloc
+    getIt.registerFactory(() => BottomBloc());
   } catch (e) {
     throw Exception('Failed to initialize dependencies: $e');
   }
