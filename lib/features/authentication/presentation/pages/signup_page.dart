@@ -11,7 +11,9 @@ class SignupPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Create Account'),
+        automaticallyImplyLeading: false,
+        title: const Text('Create Account',style: TextStyle(fontSize: 28,
+                  color: Colors.blue),),
         actions: [
           IconButton(
             icon: const Icon(Icons.brightness_6),

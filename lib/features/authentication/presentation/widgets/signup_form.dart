@@ -16,7 +16,7 @@ class SignupForm extends StatelessWidget {
       if (formKey.currentState!.validate()) {
         final name = nameController.text;
         final email = emailController.text;
-       // final password = passwordController.text;
+        // final password = passwordController.text;
 
         logger.i('💡 Attempting signup with Name: $name, Email: $email');
 
@@ -88,7 +88,34 @@ class SignupForm extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: handleSignup,
-            child: const Text('Signup'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Create Account',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/login');
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              side: const BorderSide(color: Colors.blue),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Already have an account? Log in',
+              style: TextStyle(fontSize: 16, color: Colors.blue),
+            ),
           ),
         ],
       ),
