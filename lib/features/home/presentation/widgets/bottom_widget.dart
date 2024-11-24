@@ -9,7 +9,6 @@ class BottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Expanded content for the selected tab
         Expanded(
           child: BlocBuilder<BottomBloc, BottomNavigationState>(
             builder: (context, state) {
@@ -17,18 +16,18 @@ class BottomMenu extends StatelessWidget {
             },
           ),
         ),
-        // BottomNavigationBar
         BlocBuilder<BottomBloc, BottomNavigationState>(
           builder: (context, state) {
+            final theme = Theme.of(context).bottomNavigationBarTheme;
+
             return BottomNavigationBar(
               currentIndex: state.selectedIndex,
-              onTap: (index) => context
-                  .read<BottomBloc>()
-                  .add(BottomNavigationItemTapped(index)),
+              onTap: (index) =>
+                  context.read<BottomBloc>().add(BottomNavigationItemTapped(index)),
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: Theme.of(context).colorScheme.primary,
-              unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              selectedItemColor: theme.selectedItemColor,
+              unselectedItemColor: theme.unselectedItemColor,
+              backgroundColor: theme.backgroundColor,
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),

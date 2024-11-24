@@ -16,7 +16,7 @@ class LoginPage extends StatelessWidget {
           'Login',
           style: TextStyle(
             fontSize: 28,
-            color: Colors.white, // Adjusted to match AppBar foreground
+            color: Colors.blue,
           ),
         ),
         actions: [
@@ -27,34 +27,15 @@ class LoginPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const LoginForm(),
-              const SizedBox(height: 24),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed('/signup');
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: const BorderSide(color: Colors.blue),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "Don't have an account? Sign Up",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: IntrinsicHeight(
+                child: const LoginForm(),
               ),
-            ],
+            ),
           ),
         ),
       ),

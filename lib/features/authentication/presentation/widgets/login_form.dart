@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import '../../domain/entities/user.dart'; // Import your User entity
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -13,21 +14,40 @@ class LoginForm extends StatelessWidget {
 
     Future<void> handleLogin() async {
       if (formKey.currentState!.validate()) {
-        final email = emailController.text;
-        final password = passwordController.text;
+        final email = emailController.text.trim();
 
-        logger.i('💡 Attempting login with Email: $email, Password: $password');
+        logger.i('💡 Attempting login with Email: $email');
 
-        // Simulating async operation
-        await Future.delayed(const Duration(seconds: 2)); 
+        try {
+          // Simulating async operation
+          await Future.delayed(const Duration(seconds: 2));
 
-        if (!context.mounted) return; // Ensure the context is still valid
-        
-        // Simulate success and navigate to HomeScreen
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
-        );
-        Navigator.of(context).pushReplacementNamed('/home');
+          if (!context.mounted) return;
+
+          // Simulate creating a User object (replace with actual user retrieval)
+          final user = User(
+            id: '123', // Example user ID
+            username: email.split('@')[0], // Use part of the email as username
+            email: email,
+          );
+
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Login successful!')),
+          );
+
+          // Navigate to the HomePage with the User object
+          Navigator.of(context).pushReplacementNamed('/home', arguments: user);
+        } catch (error) {
+          logger.e('❌ Login failed: $error');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Login failed. Please try again.'),
+              ),
+            );
+          }
+        }
       }
     }
 
@@ -36,6 +56,7 @@ class LoginForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Email input field
           TextFormField(
             controller: emailController,
             decoration: const InputDecoration(
@@ -47,13 +68,15 @@ class LoginForm extends StatelessWidget {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
               }
-              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) {
                 return 'Please enter a valid email';
               }
               return null;
             },
           ),
           const SizedBox(height: 16),
+
+          // Password input field
           TextFormField(
             controller: passwordController,
             decoration: const InputDecoration(
@@ -65,10 +88,15 @@ class LoginForm extends StatelessWidget {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
               }
+              if (value.length < 6) {
+                return 'Password must be at least 6 characters long';
+              }
               return null;
             },
           ),
           const SizedBox(height: 24),
+
+          // Login button
           ElevatedButton(
             onPressed: handleLogin,
             style: ElevatedButton.styleFrom(
@@ -80,7 +108,26 @@ class LoginForm extends StatelessWidget {
             ),
             child: const Text(
               'Login',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Navigate to Sign Up button
+          OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/signup');
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              side: const BorderSide(color: Colors.blue),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              "Don't have an account? Sign Up",
+              style: TextStyle(fontSize: 16, color: Colors.blue),
             ),
           ),
         ],

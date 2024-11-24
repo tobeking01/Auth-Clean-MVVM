@@ -23,6 +23,7 @@ class InputConverter {
 
 /// Represents a failure due to invalid input.
 class InvalidInputFailure extends Failure {
-  /// Constructor initializes the failure with a default property.
-  const InvalidInputFailure() : super(properties: const ['Invalid input']);
+  /// Constructor initializes the failure with a default message.
+  const InvalidInputFailure()
+      : super(message: 'Invalid input: must be a non-negative integer.');
 }

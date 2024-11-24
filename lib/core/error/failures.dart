@@ -1,34 +1,33 @@
-// lib/core/error/failures.dart
-
 import 'package:equatable/equatable.dart';
 
 /// Abstract class representing a failure in the application.
-/// All failures should extend this class.
 abstract class Failure extends Equatable {
-  /// A list of properties associated with the failure.
-  final List<dynamic> properties;
+  /// A message describing the failure (optional).
+  final String message;
 
-  /// Constructor to initialize failure with optional properties.
-  const Failure({this.properties = const <dynamic>[]});
+  /// Constructor to initialize failure with optional message.
+  const Failure({this.message = 'An unknown error occurred.'});
 
   @override
-  List<Object?> get props => [properties];
+  List<Object?> get props => [message];
 }
 
-/// Represents a failure due to server-side issues, such as 500 errors or unavailable services.
+/// Represents a failure due to server-side issues.
 class ServerFailure extends Failure {
-  /// Constructor using super parameters to initialize properties.
-  const ServerFailure({super.properties});
+  const ServerFailure({super.message = 'Server error occurred.'});
 }
 
-/// Represents a failure related to caching issues, such as reading or writing to local storage.
+/// Represents a failure related to caching issues.
 class CacheFailure extends Failure {
-  /// Constructor using super parameters to initialize properties.
-  const CacheFailure({super.properties});
+  const CacheFailure({super.message = 'Cache error occurred.'});
 }
 
-/// Represents a failure due to network issues, such as no connectivity or timeouts.
+/// Represents a failure due to network issues.
 class NetworkFailure extends Failure {
-  /// Constructor using super parameters to initialize properties.
-  const NetworkFailure({super.properties});
+  const NetworkFailure({super.message = 'Network error occurred.'});
+}
+
+/// Represents a failure related to logout functionality.
+class LogoutFailure extends Failure {
+  const LogoutFailure({required super.message});
 }
