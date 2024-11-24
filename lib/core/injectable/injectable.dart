@@ -54,6 +54,7 @@ Future<void> setupDependencies() async {
 
     // Navigation Dependencies
     getIt.registerFactory(() => BottomBloc());
+    
   } catch (e) {
      logger.i('❌ Failed to initialize dependencies: $e');
     throw Exception('Failed to initialize dependencies: $e');
